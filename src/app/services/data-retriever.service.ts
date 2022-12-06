@@ -32,6 +32,14 @@ export class DataRetrieverService {
     );
   }
 
+  getPublishersById(res: string[]): Observable<PublisherInfo[]> {
+    console.log(res);
+    return this.http.get<PublisherInfo[]>(this.publisherUrl).pipe(
+      tap((_) => console.log('fetched publishers')),
+      catchError(this.handleError<PublisherInfo[]>('getPublishers', []))
+    );
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       // TODO: send the error to remote logging infrastructure

@@ -4,7 +4,7 @@
       Book Id: {{ product.id }}, Book Name: {{ product.name }}, Availability:
       <i
         [ngClass]="
-          product.inStock ? 'pi pi-check-circle' : 'pi pi-times-circle'
+          product.available ? 'pi pi-check-circle' : 'pi pi-times-circle'
         "
       ></i>
       Publisher: {{ product.publisherInfo.publisherName }}, Phone Number:

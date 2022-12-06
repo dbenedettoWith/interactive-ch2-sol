@@ -2,7 +2,16 @@ import { Product, PublisherInfo } from './../models/product.models';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DataRetrieverService } from '../services/data-retriever.service';
 import { map, takeUntil } from 'rxjs/operators';
-import { forkJoin, Observable, of, Subject, tap, catchError } from 'rxjs';
+import {
+  forkJoin,
+  Observable,
+  of,
+  Subject,
+  tap,
+  catchError,
+  mergeMap,
+  switchMap,
+} from 'rxjs';
 
 @Component({
   selector: 'app-product-list',
@@ -23,10 +32,10 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   getProductDetails(): void {
-    this.products$ = this.retrieveProducts();
+    this.products$ = this.retrieveProductsParallel();
   }
 
-  private retrieveProducts(): Observable<Product[]> {
+  private retrieveProductsParallel(): Observable<Product[]> {
     return forkJoin({
       products: this.dataService.getProducts(),
       publishers: this.dataService.getPublishers(),
@@ -41,6 +50,26 @@ export class ProductListComponent implements OnInit, OnDestroy {
           };
         });
         return products;
+      })
+    );
+  }
+
+  private retrieveProductsSeq(): Observable<Product[]> {
+    return this.dataService.getProducts().pipe(
+      mergeMap((res) => {
+        const bookId = res.map((res) => res.id);
+        return this.dataService.getPublishersById(bookId).pipe(
+          map((publishers) => {
+            const products: Product[] = res.map((product) => {
+              return {
+                ...product,
+                available: product.inStock,
+                publisherInfo: this.publisherInfoModified(publishers, product),
+              };
+            });
+            return products;
+          })
+        );
       })
     );
   }
