@@ -2,7 +2,7 @@ import { Product, PublisherInfo } from './../models/product.models';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DataRetrieverService } from '../services/data-retriever.service';
 import { map, takeUntil } from 'rxjs/operators';
-import { forkJoin, Observable, Subject, tap } from 'rxjs';
+import { forkJoin, Observable, of, Subject, tap, catchError } from 'rxjs';
 
 @Component({
   selector: 'app-product-list',
@@ -48,6 +48,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     const publisherMatch = publishers?.find(
       (publisher) => publisher.id === product.id
     );
+    if (!publisherMatch) return {};
     const { id, ...rest } = publisherMatch;
     return rest;
   }
