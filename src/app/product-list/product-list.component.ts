@@ -1,38 +1,28 @@
 import { Product, PublisherInfo } from './../models/product.models';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DataRetrieverService } from '../services/data-retriever.service';
-import { map, takeUntil } from 'rxjs/operators';
-import {
-  forkJoin,
-  Observable,
-  of,
-  Subject,
-  tap,
-  catchError,
-  mergeMap,
-  switchMap,
-} from 'rxjs';
+import { map } from 'rxjs/operators';
+import { forkJoin, Observable, mergeMap } from 'rxjs';
 
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
 })
-export class ProductListComponent implements OnInit, OnDestroy {
+export class ProductListComponent implements OnInit {
   products$: Observable<Product[]>;
   products: Product[] = [];
-
-  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(private dataService: DataRetrieverService) {}
 
   ngOnInit(): void {
     this.getProductDetails();
-    this.getProductsSubscription();
   }
 
   getProductDetails(): void {
     this.products$ = this.retrieveProductsParallel();
+    //uncomment to retrieve the products sequentially
+    // this.products$ = this.retrieveProductsSeq();
   }
 
   private retrieveProductsParallel(): Observable<Product[]> {
@@ -84,25 +74,5 @@ export class ProductListComponent implements OnInit, OnDestroy {
     if (!publisherMatch) return {};
     const { id, ...rest } = publisherMatch;
     return rest;
-  }
-
-  getProductsSubscription(): void {
-    this.dataService
-      .getProducts()
-      .pipe(
-        takeUntil(this.destroy$),
-        tap((products) => {
-          const tempArray = products.map((product) => {
-            return { ...product, available: product.inStock };
-          });
-          this.products = tempArray;
-        })
-      )
-      .subscribe();
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 }
