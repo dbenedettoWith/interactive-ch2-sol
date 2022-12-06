@@ -2,7 +2,7 @@ import { Product, PublisherInfo } from './../models/product.models';
 import { Component, OnInit } from '@angular/core';
 import { DataRetrieverService } from '../services/data-retriever.service';
 import { map } from 'rxjs/operators';
-import { forkJoin, Observable, mergeMap } from 'rxjs';
+import { forkJoin, Observable, mergeMap, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-product-list',
@@ -46,7 +46,7 @@ export class ProductListComponent implements OnInit {
 
   private retrieveProductsSeq(): Observable<Product[]> {
     return this.dataService.getProducts().pipe(
-      mergeMap((res) => {
+      switchMap((res) => {
         const bookId = res.map((res) => res.id);
         return this.dataService.getPublishersById(bookId).pipe(
           map((publishers) => {
