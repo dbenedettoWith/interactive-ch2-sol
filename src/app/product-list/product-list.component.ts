@@ -23,7 +23,11 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   getProductDetails(): void {
-    this.products$ = forkJoin({
+    this.products$ = this.retrieveProducts();
+  }
+
+  private retrieveProducts(): Observable<Product[]> {
+    return forkJoin({
       products: this.dataService.getProducts(),
       publishers: this.dataService.getPublishers(),
     }).pipe(
