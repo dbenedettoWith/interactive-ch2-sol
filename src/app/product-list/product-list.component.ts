@@ -30,20 +30,26 @@ export class ProductListComponent implements OnInit, OnDestroy {
       map((result) => {
         const publishers: PublisherInfo[] = result.publishers;
         const products: Product[] = result.products?.map((product) => {
-          return { ...product, available: product.inStock, 
-          publisherInfo:  this.publisherInfoModified(publishers, product)}
-          
+          return {
+            ...product,
+            available: product.inStock,
+            publisherInfo: this.publisherInfoModified(publishers, product),
+          };
         });
-
         return products;
       })
     );
   }
 
-  publisherInfoModified(publishers: PublisherInfo[], product: Product): Partial<PublisherInfo> {
-    const publisherMatch = publishers?.find(publisher => publisher.id === product.id)
-    const {id, ... rest} = publisherMatch;
-    return rest; 
+  private publisherInfoModified(
+    publishers: PublisherInfo[],
+    product: Product
+  ): Partial<PublisherInfo> {
+    const publisherMatch = publishers?.find(
+      (publisher) => publisher.id === product.id
+    );
+    const { id, ...rest } = publisherMatch;
+    return rest;
   }
 
   getProductsSubscription(): void {
