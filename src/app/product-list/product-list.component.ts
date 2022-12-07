@@ -2,7 +2,7 @@ import { Product, PublisherInfo } from './../models/product.models';
 import { Component, OnInit } from '@angular/core';
 import { DataRetrieverService } from '../services/data-retriever.service';
 import { map } from 'rxjs/operators';
-import { forkJoin, Observable, mergeMap, switchMap } from 'rxjs';
+import { forkJoin, Observable, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-product-list',
