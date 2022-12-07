@@ -1,6 +1,6 @@
 # interactive-ch2-sol
 
-[Edit on StackBlitz ⚡️](https://stackblitz.com/edit/interactive-ch-sol-ieb6b2)
+[Edit on StackBlitz ⚡️](https://stackblitz.com/edit/interactive-ch2-sol)
 
 this is an interactive challenge that tests the basic knowledge of Angular application
 
@@ -23,5 +23,6 @@ The application comes equipped with an in memory web api.
 8. Display a green checkmark icon (primeng icon class: pi pi-check-circle ) if the product is available and a red x icon (primeng icon class pi pi-times-circle) if the product is not available.
 
 ## Challenge Pt 2
+
 1. Create a function that makes an HTTP Get call to 'api/products' then uses the result to call a function that takes an string array of id as a parameter and logs those to the console then performs an HTTP GET call to endpoint 'api/publishers'.
-2. Repeat steps 4-8. 
+2. Repeat steps 4-8.
